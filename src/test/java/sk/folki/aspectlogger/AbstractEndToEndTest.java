@@ -64,7 +64,8 @@ abstract public class AbstractEndToEndTest {
 		return springContext.getBean(beanClass);
 	}
 	
-	protected Logger getLogger(Class<?> loggerName) {
+	protected Logger getLoggerWithDefaultConfiguration(Class<?> loggerName) {
+		configureLogger(loggerName);
 		return Logger.getLogger(loggerName);
 	}
 	
@@ -100,5 +101,9 @@ abstract public class AbstractEndToEndTest {
 	
 	protected int getLogFileLenght() {
 		return getLogMessages().length();
+	}
+	
+	protected int getLogMessagesCount(StringBuffer logMessages) {
+		return logMessages.toString().split("\n").length;
 	}
 }

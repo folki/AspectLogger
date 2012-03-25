@@ -16,7 +16,8 @@ public class LogErrorMessageOfLoggableMethodEndToEndTest extends AbstractEndToEn
 	
 	public LogErrorMessageOfLoggableMethodEndToEndTest() {
 		service = getBean(Service.class);
-		log = getLogger(ServiceImpl.class);
+		log = getLoggerWithDefaultConfiguration(ServiceImpl.class);
+		configureLogger(ServiceImpl.class);
 	}
 
 	@Override
@@ -47,12 +48,15 @@ public class LogErrorMessageOfLoggableMethodEndToEndTest extends AbstractEndToEn
 	}
 	
 	private void whenServiceMethodIsInvoked() {
-		service.operation();
+		try {
+			service.operation();
+		} catch (Exception e) {}
 	}
 	
 	private void thenLogShouldContainTheOnlyRecord(String expectedLogRecord) {
 		StringBuffer logMessages = getLogMessages();
-		assertThat(logMessages.length(), is(1));
+		int logMessagesCount = getLogMessagesCount(logMessages);
+		assertThat(logMessagesCount, is(1));
 		assertTrue(logMessageContainsMessage(logMessages, expectedLogRecord));
 	}	
 	

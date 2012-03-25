@@ -16,7 +16,7 @@ public class LogInfoMessageOfLoggableMethodEndToEndTest extends AbstractEndToEnd
 	
 	public LogInfoMessageOfLoggableMethodEndToEndTest() {
 		service = getBean(Service.class);
-		log = getLogger(ServiceImpl.class);
+		log = getLoggerWithDefaultConfiguration(ServiceImpl.class);
 	}
 	
 	@Override

@@ -16,8 +16,7 @@ public class LogAspect {
 		Class classOfReachedJoinPoint = getClassOfJoinPoint(joinPoint);
 		Logger log = getLoggerForClass(classOfReachedJoinPoint);
 		String message = loggable.value();
-		log.info(message);
-		
+		log.info(message);	
 	}
 
 	@SuppressWarnings("rawtypes")
