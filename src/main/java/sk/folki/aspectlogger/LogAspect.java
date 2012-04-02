@@ -2,21 +2,49 @@ package sk.folki.aspectlogger;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 @Component
 @Aspect
 public class LogAspect {
 	
-	@Before(value = "@annotation(loggable)", argNames = "joinPoint, loggable")
+	@Around(value = "@annotation(loggable)", argNames = "joinPoint, loggable")
 	@SuppressWarnings("rawtypes")
-	public void pointcutAdvice(JoinPoint joinPoint, Loggable loggable) {		
+	public void pointcutAdvice(ProceedingJoinPoint joinPoint, Loggable loggable) {		
 		Class classOfReachedJoinPoint = getClassOfJoinPoint(joinPoint);
 		Logger log = getLoggerForClass(classOfReachedJoinPoint);
-		String message = loggable.value();
-		log.info(message);	
+		boolean loggableMethodFinishedNormally = proccedToLoggableMethod(joinPoint);
+		String logMessage = null;
+		if (loggableMethodFinishedNormally) {
+			logMessage = assembleInfoLogMessage(loggable);
+			log.info(logMessage);
+		} else {
+			logMessage = assembleErrorLogMessage(loggable);
+			log.error(logMessage);
+		}
+	}
+
+	private String assembleErrorLogMessage(Loggable loggable) {
+		String infoMessage = loggable.value();
+		String errorMessage = "Error: " + infoMessage;
+		return errorMessage;
+	}
+
+	private String assembleInfoLogMessage(Loggable loggable) {
+		String infoMessage = loggable.value();
+		return infoMessage;
+	}
+
+	private boolean proccedToLoggableMethod(ProceedingJoinPoint joinPoint) {		
+		try {
+			joinPoint.proceed();
+			return true;
+		} catch (Throwable e) {
+			return false;
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
