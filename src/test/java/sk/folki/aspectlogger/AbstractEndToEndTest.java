@@ -9,6 +9,9 @@ import org.apache.log4j.WriterAppender;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 abstract public class AbstractEndToEndTest {
+	final static MavenDependency ASPECTJWEAVER = maven(groupId("org.aspectj"), artifactId("aspectjweaver"));
+	final static MavenDependency ASPECTJRT = maven(groupId("org.aspectj"), artifactId("aspectjrt"));
+	
 	private StringWriter logFileContent = new StringWriter();
 	private static AnnotationConfigApplicationContext springContext;
 	
@@ -27,9 +30,40 @@ abstract public class AbstractEndToEndTest {
 		givenLogAspectIsManagedBySpring();
 		givenSpringAspectJAutoProxyIsEnabled();
 		givenServiceBeanIsManagedBySpring();
+		givenDependencyIsOnTheApplicationClasspath(ASPECTJWEAVER);
+		givenDependencyIsOnTheApplicationClasspath(ASPECTJRT);
 		givenSpringApplicationContextIsInitialized();		
 	}
 	
+	private void givenDependencyIsOnTheApplicationClasspath(MavenDependency dependency) {				
+		if (dependency.equals(ASPECTJWEAVER)) {
+			checkAspectJWeaverExistsOnClasspath();
+		}
+		if (dependency.equals(ASPECTJRT)) {
+			checkAspectJRtExistsOnClasspath();
+		}
+	}
+	
+	private void checkAspectJRtExistsOnClasspath() {
+		// TODO Implement checking org.aspectj.aspectjrt dependency classpath existence.
+	}
+	
+	private void checkAspectJWeaverExistsOnClasspath() {
+		// TODO Implement checking org.aspectj.aspectjweaver dependency classpath existence.
+	}
+
+	private static MavenDependency maven(String groupId, String artifactId) { // method exists just to enhance the readability of code
+		return new MavenDependency(groupId, artifactId);
+	}
+
+	private static String artifactId(String artifactId) {
+		return artifactId;
+	}
+	
+	private static String groupId(String groupId) {
+		return groupId;
+	}
+
 	private void givenLog4jIsConfigured() {
 		configureRootLogger();
 	}
@@ -44,6 +78,7 @@ abstract public class AbstractEndToEndTest {
 		springContext = new AnnotationConfigApplicationContext();
 	}
 
+	// TODO Rename LogAspect so to be better understandable that it is part of AspectLogger library when user needs set up the aspect to be managed by Spring. 
 	private void givenLogAspectIsManagedBySpring() {
 		springContext.register(LogAspect.class);
 	}
@@ -106,4 +141,47 @@ abstract public class AbstractEndToEndTest {
 	protected int getLogMessagesCount(StringBuffer logMessages) {
 		return logMessages.toString().split("\n").length;
 	}
+}
+
+class MavenDependency {
+	private String groupId;
+	private String artifactId;
+	
+	public MavenDependency(String groupId, String artifactId) {
+		this.groupId = groupId;
+		this.artifactId = artifactId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((artifactId == null) ? 0 : artifactId.hashCode());
+		result = prime * result
+				+ ((groupId == null) ? 0 : groupId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MavenDependency other = (MavenDependency) obj;
+		if (artifactId == null) {
+			if (other.artifactId != null)
+				return false;
+		} else if (!artifactId.equals(other.artifactId))
+			return false;
+		if (groupId == null) {
+			if (other.groupId != null)
+				return false;
+		} else if (!groupId.equals(other.groupId))
+			return false;
+		return true;
+	}		
 }
