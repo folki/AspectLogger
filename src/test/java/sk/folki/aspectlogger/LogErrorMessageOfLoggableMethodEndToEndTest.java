@@ -2,6 +2,7 @@ package sk.folki.aspectlogger;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -11,8 +12,10 @@ import org.junit.Test;
 
 public class LogErrorMessageOfLoggableMethodEndToEndTest extends AbstractEndToEndTest {
 	private final static String MESSAGE = "Service operation.";
-	private Logger log;
 	private Service service;
+	private Logger log;
+	
+	private Throwable caughtException;
 	
 	public LogErrorMessageOfLoggableMethodEndToEndTest() {
 		service = getBean(Service.class);
@@ -30,7 +33,7 @@ public class LogErrorMessageOfLoggableMethodEndToEndTest extends AbstractEndToEn
 		givenServiceLoggerIsSetToLevel(Level.INFO);
 		givenServiceLoggerAppenderUsesSimpleLayout();
 		givenServiceMethodDefinesLoggableMessageAs("Service operation.");
-		whenServiceMethodIsInvoked();
+		whenServiceMethodIsInvokedByClient();
 		thenLogShouldContainTheOnlyRecord("ERROR - Error: Service operation.");
 	}
 	
@@ -47,10 +50,12 @@ public class LogErrorMessageOfLoggableMethodEndToEndTest extends AbstractEndToEn
 		assertThat(MESSAGE, equalTo(expectedMessage));
 	}
 	
-	private void whenServiceMethodIsInvoked() {
+	private void whenServiceMethodIsInvokedByClient() {
 		try {
 			service.operation();
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			caughtException = e;
+		}
 	}
 	
 	private void thenLogShouldContainTheOnlyRecord(String expectedLogRecord) {
@@ -58,8 +63,18 @@ public class LogErrorMessageOfLoggableMethodEndToEndTest extends AbstractEndToEn
 		int logMessagesCount = getLogMessagesCount(logMessages);
 		assertThat(logMessagesCount, is(1));
 		assertTrue(logMessageContainsMessage(logMessages, expectedLogRecord));
-	}	
+	}
 	
+	@Test
+	public void testRethrowExceptionThrownByLoggableMethodForItsFurtherProcessingByClient() {
+		whenServiceMethodIsInvokedByClient();
+		thenExceptionThrownByServiceMethodShouldHaveBeenCaughtByClient();
+	}
+	
+	private void thenExceptionThrownByServiceMethodShouldHaveBeenCaughtByClient() {
+		assertNotNull(caughtException);
+	}
+
 	static interface Service {
 		void operation();
 	}

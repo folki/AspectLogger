@@ -13,17 +13,19 @@ public class LogAspect {
 	
 	@Around(value = "@annotation(loggable)", argNames = "joinPoint, loggable")
 	@SuppressWarnings("rawtypes")
-	public void pointcutAdvice(ProceedingJoinPoint joinPoint, Loggable loggable) {		
+	public void pointcutAdvice(ProceedingJoinPoint joinPoint, Loggable loggable) throws Throwable {		
 		Class classOfReachedJoinPoint = getClassOfJoinPoint(joinPoint);
 		Logger log = getLoggerForClass(classOfReachedJoinPoint);
-		boolean loggableMethodFinishedNormally = proccedToLoggableMethod(joinPoint);
+		ProcessingResult processingResult = proccedToLoggableMethod(joinPoint);
 		String logMessage = null;
-		if (loggableMethodFinishedNormally) {
+		if (processingResult.isOk()) {
 			logMessage = assembleInfoLogMessage(loggable);
 			log.info(logMessage);
 		} else {
 			logMessage = assembleErrorLogMessage(loggable);
 			log.error(logMessage);
+			Throwable caughtException = processingResult.getCaughtException();
+			throw caughtException;
 		}
 	}
 
@@ -38,12 +40,12 @@ public class LogAspect {
 		return infoMessage;
 	}
 
-	private boolean proccedToLoggableMethod(ProceedingJoinPoint joinPoint) {		
+	private ProcessingResult proccedToLoggableMethod(ProceedingJoinPoint joinPoint) {		
 		try {
 			joinPoint.proceed();
-			return true;
-		} catch (Throwable e) {
-			return false;
+			return ProcessingResult.createOkResult();
+		} catch (Throwable error) {
+			return ProcessingResult.createErrorResult(error);
 		}
 	}
 
@@ -55,5 +57,35 @@ public class LogAspect {
 	@SuppressWarnings("rawtypes")
 	private Class getClassOfJoinPoint(JoinPoint joinPoint) {
 		return joinPoint.getTarget().getClass();
+	}
+	
+	private static class ProcessingResult {
+		private	boolean isOk;
+		private Throwable caughtException;
+		
+		public ProcessingResult() {
+			isOk = true;
+		}
+		
+		public ProcessingResult(Throwable error) {
+			isOk = false;
+			caughtException = error;
+		}
+
+		public static ProcessingResult createOkResult() {
+			return new ProcessingResult();
+		}
+		
+		public static ProcessingResult createErrorResult(Throwable error) {
+			return new ProcessingResult(error);
+		}
+		
+		Throwable getCaughtException() {
+			return caughtException;
+		}		
+
+		public boolean isOk() {
+			return isOk;
+		}
 	}
 }
