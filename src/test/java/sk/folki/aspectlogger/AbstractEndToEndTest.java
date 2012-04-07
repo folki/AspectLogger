@@ -1,5 +1,7 @@
 package sk.folki.aspectlogger;
 
+import static org.junit.Assert.fail;
+
 import java.io.StringWriter;
 
 import org.apache.log4j.Level;
@@ -45,14 +47,37 @@ abstract public class AbstractEndToEndTest {
 	}
 	
 	private void checkAspectJRtExistsOnClasspath() {
-		// TODO Implement checking org.aspectj.aspectjrt dependency classpath existence.
+		if (isNotClassOnClasspath("org.aspectj.lang.annotation.Aspect")) {
+			fail("AspectJRT dependency is not safisfied.");
+		}
 	}
 	
-	private void checkAspectJWeaverExistsOnClasspath() {
-		// TODO Implement checking org.aspectj.aspectjweaver dependency classpath existence.
+	private boolean isNotClassOnClasspath(String fullyQualifiedClassName) {
+		return !isClassOnClasspath(fullyQualifiedClassName);
 	}
 
-	private static MavenDependency maven(String groupId, String artifactId) { // method exists just to enhance the readability of code
+	private boolean isClassOnClasspath(String fullyQualifiedClassName) {
+		final boolean DO_NOT_INITIALIZE_CLASS = false;
+		final ClassLoader THIS_TEST_CLASSLOADER = getThisTestClassLoader();
+		try {
+			Class.forName(fullyQualifiedClassName, DO_NOT_INITIALIZE_CLASS,	THIS_TEST_CLASSLOADER);
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+	}
+
+	private ClassLoader getThisTestClassLoader() {
+		return this.getClass().getClassLoader();
+	}
+
+	private void checkAspectJWeaverExistsOnClasspath() {		
+		if (isNotClassOnClasspath("org.aspectj.weaver.reflect.ReflectionWorld$ReflectionWorldException")) {
+			fail("AspectJWeaver dependency is not safisfied.");
+		}
+	}
+
+	private static MavenDependency maven(String groupId, String artifactId) {
 		return new MavenDependency(groupId, artifactId);
 	}
 
