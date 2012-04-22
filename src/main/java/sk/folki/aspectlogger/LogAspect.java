@@ -1,5 +1,9 @@
 package sk.folki.aspectlogger;
 
+import static org.apache.log4j.Level.DEBUG;
+import static org.apache.log4j.Level.INFO;
+
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,25 +21,59 @@ public class LogAspect {
 		Class classOfReachedJoinPoint = getClassOfJoinPoint(joinPoint);
 		Logger log = getLoggerForClass(classOfReachedJoinPoint);
 		ProcessingResult processingResult = proccedToLoggableMethod(joinPoint);
-		String logMessage = null;
+		Level logLevel = log.getLevel();
 		if (processingResult.isOk()) {
-			logMessage = assembleInfoLogMessage(loggable);
-			log.info(logMessage);
+			if (logLevel == INFO) {
+				logOkInfoMessage(log, loggable);
+			} else if (logLevel == DEBUG) {
+				logOkDebugMessage(log, joinPoint, loggable);
+			} 			
 		} else {
-			logMessage = assembleErrorLogMessage(loggable);
-			log.error(logMessage);
+			if (logLevel == INFO) {
+				logErrorInfoMessage(log, loggable, processingResult);
+			} else if (logLevel == DEBUG) {
+				logErrorDebugMessage(log, joinPoint, loggable, processingResult);
+			}
 			Throwable caughtException = processingResult.getCaughtException();
 			throw caughtException;
 		}
 	}
 
-	private String assembleErrorLogMessage(Loggable loggable) {
+	private void logErrorDebugMessage(Logger log, ProceedingJoinPoint joinPoint, Loggable loggable, ProcessingResult processingResult) {
+		String logMessage = assembleErrorDebugLogMessage(joinPoint, loggable);
+		log.error(logMessage);
+	}
+
+	private String assembleErrorDebugLogMessage(ProceedingJoinPoint joinPoint, Loggable loggable) {
+		return "ErrorDebugMessage";
+	}
+
+	private void logErrorInfoMessage(Logger log, Loggable loggable, ProcessingResult processingResult) {
+		String logMessage = assembleErrorInfoLogMessage(loggable);
+		log.error(logMessage);
+	}
+
+	private void logOkDebugMessage(Logger log, ProceedingJoinPoint joinPoint, Loggable loggable) {
+		String logMessage = assembleOkDebugLogMessage(joinPoint, loggable);
+		log.debug(logMessage);
+	}
+
+	private String assembleOkDebugLogMessage(ProceedingJoinPoint joinPoint, Loggable loggable) {
+		return "OkDebugMessage";
+	}
+
+	private void logOkInfoMessage(Logger log, Loggable loggable) {
+		String logMessage = assembleOkInfoLogMessage(loggable);
+		log.info(logMessage);
+	}
+
+	private String assembleErrorInfoLogMessage(Loggable loggable) {
 		String infoMessage = loggable.value();
 		String errorMessage = "Error: " + infoMessage;
 		return errorMessage;
 	}
 
-	private String assembleInfoLogMessage(Loggable loggable) {
+	private String assembleOkInfoLogMessage(Loggable loggable) {
 		String infoMessage = loggable.value();
 		return infoMessage;
 	}
