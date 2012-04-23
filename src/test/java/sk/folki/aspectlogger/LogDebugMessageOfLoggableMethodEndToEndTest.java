@@ -42,7 +42,7 @@ public class LogDebugMessageOfLoggableMethodEndToEndTest extends AbstractEndToEn
 		givenToStringMethodOfParameterTypeReturns("Parameter type instance");
 		givenToStringMethodOfReturnTypeReturns("Return type instance");
 		whenServiceMethodIsInvoked();
-		thenLogShouldContainTheRecord("DEBUG - Service operation WITH PARAMS parameter = Parameter type instance RETURNS Return type instance.");
+		thenLogShouldContainTheRecord("DEBUG - Service operation WITH PARAMS 0=Parameter type instance RETURNED Return type instance\n");
 	}
 
 	private void givenServiceMethodDefinesLoggableMessageAs(String expectedMessage) {
@@ -79,7 +79,7 @@ public class LogDebugMessageOfLoggableMethodEndToEndTest extends AbstractEndToEn
 		givenToStringMethodOfReturnTypeReturns("Return type instance");
 		givenServiceMethodThrowsException(new RuntimeException("Error message"));
 		whenServiceMethodIsInvoked();
-		thenLogShouldContainTheRecord("ERROR - Service operation WITH PARAMS parameter=Parameter type instance THROWS Error message.");
+		thenLogShouldContainTheRecord("ERROR - Service operation WITH PARAMS 0=Parameter type instance THROWN Error message\n");
 	}
 	
 	private void givenServiceMethodThrowsException(Exception exceptionToThrow) {
