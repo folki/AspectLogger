@@ -26,38 +26,33 @@ public class LogAspect {
 		Class classOfReachedJoinPoint = getClassOfJoinPoint(joinPoint);
 		Logger log = getLoggerForClass(classOfReachedJoinPoint);
 		ProcessingResult processingResult = proccedToLoggableMethod(joinPoint);
+		Parameters loggableOperationParameters = getParameters(joinPoint);
 		Level logLevel = log.getLevel();
 		if (processingResult.isOk()) {
 			if (logLevel == INFO) {
 				logOkInfoMessage(log, loggable);
 			} else if (logLevel == DEBUG) {
-				logOkDebugMessage(log, joinPoint, loggable, processingResult);
+				logOkDebugMessage(log, loggableOperationParameters, loggable, processingResult);
 			} 			
 		} else {
 			if (logLevel == INFO) {
 				logErrorInfoMessage(log, loggable, processingResult);
 			} else if (logLevel == DEBUG) {
-				logErrorDebugMessage(log, joinPoint, loggable, processingResult);
+				logErrorDebugMessage(log, loggableOperationParameters, loggable, processingResult);
 			}
 			Throwable caughtException = processingResult.getCaughtException();
 			throw caughtException;
 		}
-		
-		// --
-		/*logLevel = logLevelDecisionMaker.getLogLevel
-		messageToLog = messageCreator.createMessage(joinPoint, loggable, processingResult);
-		aspectLogger.logMessage(logger, logLevel, messageToLog);*/
 	}
 
-	private void logErrorDebugMessage(Logger log, ProceedingJoinPoint joinPoint, Loggable loggable, ProcessingResult processingResult) {
-		String logMessage = assembleErrorDebugLogMessage(joinPoint, loggable, processingResult);
+	private void logErrorDebugMessage(Logger log, Parameters loggableOperationParameters, Loggable loggable, ProcessingResult processingResult) {
+		String logMessage = assembleErrorDebugLogMessage(loggableOperationParameters, loggable, processingResult);
 		log.error(logMessage);
 	}
 
-	private String assembleErrorDebugLogMessage(ProceedingJoinPoint joinPoint, Loggable loggable, ProcessingResult processingResult) {
+	private String assembleErrorDebugLogMessage(Parameters loggableOperationParameters, Loggable loggable, ProcessingResult processingResult) {
 		// Service operation WITH PARAMS parameter=Parameter type instance THROWS Error message.
 		String loggableOperationMessage = getLoggableOperationMessage(loggable);
-		Parameters loggableOperationParameters = getParameters(joinPoint);
 		String loggableOperationParametersStringChain = convertParametersToStringChain(loggableOperationParameters);
 		String loggableOperationOccuredError = getErrorOccuredDurringProcessingLoggableMethod(processingResult);
 		String errorDebugLogMessage = 
@@ -121,15 +116,14 @@ public class LogAspect {
 		log.error(logMessage);
 	}
 
-	private void logOkDebugMessage(Logger log, ProceedingJoinPoint joinPoint, Loggable loggable, ProcessingResult processingResult) {
-		String logMessage = assembleOkDebugLogMessage(joinPoint, loggable, processingResult);
+	private void logOkDebugMessage(Logger log, Parameters loggableOperationParameters, Loggable loggable, ProcessingResult processingResult) {
+		String logMessage = assembleOkDebugLogMessage(loggableOperationParameters, loggable, processingResult);
 		log.debug(logMessage);
 	}
 
-	private String assembleOkDebugLogMessage(ProceedingJoinPoint joinPoint, Loggable loggable, ProcessingResult processingResult) {
+	private String assembleOkDebugLogMessage(Parameters loggableOperationParameters, Loggable loggable, ProcessingResult processingResult) {
 		// Service operation WITH PARAMS 0=Parameter type instance RETURNED Return type instance
 		String loggableOperationMessage = getLoggableOperationMessage(loggable);
-		Parameters loggableOperationParameters = getParameters(joinPoint);
 		String loggableOperationParametersStringChain = convertParametersToStringChain(loggableOperationParameters);
 		String loggableOperationReturnedValue = getValueReturnedFromProcessedLoggableMethod(processingResult);
 		String errorDebugLogMessage = 
