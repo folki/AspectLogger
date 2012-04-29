@@ -10,7 +10,8 @@ import org.apache.log4j.SimpleLayout;
 import org.apache.log4j.WriterAppender;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-abstract public class AbstractEndToEndTest {
+// TODO Move end to end tests to own package.
+abstract class AbstractEndToEndTest {
 	final static MavenDependency ASPECTJWEAVER = maven(groupId("org.aspectj"), artifactId("aspectjweaver"));
 	final static MavenDependency ASPECTJRT = maven(groupId("org.aspectj"), artifactId("aspectjrt"));
 	
