@@ -12,7 +12,7 @@ public class ProceedingJoinPointAdapterTest extends UnitilsJUnit4 {
 	private Mock<ProceedingJoinPoint> joinPoint;
 	private Mock<Loggable> loggable;
 	
-	private LoggableMethod loggableMethod;
+	private LoggableMethodDescription loggableMethod;
 	
 	@Test
 	public void testLogMessageValue() {

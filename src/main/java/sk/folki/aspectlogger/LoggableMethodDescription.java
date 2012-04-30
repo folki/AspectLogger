@@ -1,7 +1,7 @@
 package sk.folki.aspectlogger;
 
 
-class LoggableMethod {
+class LoggableMethodDescription {
 	private Parameters parameters;
 	private String logMessage;
 

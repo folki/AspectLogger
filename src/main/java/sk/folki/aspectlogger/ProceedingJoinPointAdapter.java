@@ -16,10 +16,10 @@ class ProceedingJoinPointAdapter {
 		return new ProceedingJoinPointAdapter(joinPoint, loggable);
 	}
 
-	public LoggableMethod toLoggableMethod() {
+	public LoggableMethodDescription toLoggableMethod() {
 		Parameters parameters = getParameters(joinPoint);
 		String logMessage = getLogMessage(loggable);
-		LoggableMethod loggableMethod = new LoggableMethod();
+		LoggableMethodDescription loggableMethod = new LoggableMethodDescription();
 		loggableMethod.setParameters(parameters);
 		loggableMethod.setLogMessage(logMessage);
 		return loggableMethod;
