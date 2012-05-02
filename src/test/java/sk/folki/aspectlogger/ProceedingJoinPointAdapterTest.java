@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.unitils.UnitilsJUnit4;
 import org.unitils.mock.Mock;
@@ -14,19 +16,46 @@ public class ProceedingJoinPointAdapterTest extends UnitilsJUnit4 {
 	
 	private LoggableMethodDescription loggableMethod;
 	
+	@Before
+	public void init() throws Exception {
+		setUpJointPoint();
+		setUpLoggable();
+	}
+	
+	private void setUpJointPoint() throws Exception {
+		loggableMethodHasNoParameters();
+		loggableMethodBelongsToClass(WhateverClass.class);
+	}
+
+	private class WhateverClass {		
+	}
+
+	private void loggableMethodHasNoParameters() {
+		loggableMethodHasParameters(noParameters());
+	}
+
+	private Object[] noParameters() {
+		return new Object[] {};
+	}
+
+	private void setUpLoggable() {
+		loggableMethodMessageIs("Default message");
+	}
+
 	@Test
 	public void testLogMessageValue() {
-		loggableMessageIs("Service operation");
-		adapterAdaptsLoggableAnnotationToLoggableMethodObject();
+		loggableMethodMessageIs("Service operation");
+		adapterAdaptsLoggableAnnotatedMethodToLoggableMethodObject();
 		loggableMethodCreatedByAdapterHasLogMessage("Service operation");
 	}
 	
-	private void loggableMessageIs(String loggableValue) {
+	private void loggableMethodMessageIs(String loggableValue) {
+		loggable.resetBehavior();
 		loggable.returns(loggableValue).value();
 	}
 
-	private void adapterAdaptsLoggableAnnotationToLoggableMethodObject() {
-		loggableMethod =
+	private void adapterAdaptsLoggableAnnotatedMethodToLoggableMethodObject() {
+		loggableMethod = 
 			ProceedingJoinPointAdapter.adapt(joinPoint.getMock(), loggable.getMock()).toLoggableMethod();
 	}
 
@@ -72,11 +101,6 @@ public class ProceedingJoinPointAdapterTest extends UnitilsJUnit4 {
 			return toStringReturnValued;
 		}
 		
-	}
-
-	private void adapterAdaptsLoggableAnnotatedMethodToLoggableMethodObject() {
-		loggableMethod = 
-			ProceedingJoinPointAdapter.adapt(joinPoint.getMock(), loggable.getMock()).toLoggableMethod();
 	}
 
 	private void loggableMethodCreatedByAdapterHasParameters(ExpectedLoggableMethodParameter... parameters) {
@@ -151,5 +175,25 @@ public class ProceedingJoinPointAdapterTest extends UnitilsJUnit4 {
 
 	private String value(String value) {
 		return value;
+	}
+	
+	@Ignore	// I was not able to find a way how to implement this test. There is a issue with mocking the jointPoint where mocked instance always returns java.lang.Class instead of concrete class name setUp during preparing the test.
+	@Test
+	public void testParentClassValue() throws Exception {
+		loggableMethodBelongsToClass(SomeClass.class);
+		adapterAdaptsLoggableAnnotatedMethodToLoggableMethodObject();
+		loggableMethodCreatedByAdapterHasParentClassValue(SomeClass.class);
+	}
+
+	private <T> void loggableMethodBelongsToClass(Class<T> targetClass) throws Exception {
+		joinPoint.resetBehavior();
+		joinPoint.returns(targetClass).getTarget().getClass();
+	}
+
+	private void loggableMethodCreatedByAdapterHasParentClassValue(Class<?> expectedParentClass) {
+		assertThat(loggableMethod.getParentClass().getName(), equalTo(expectedParentClass.getName()));
+	}
+
+	private class SomeClass {
 	}
 }

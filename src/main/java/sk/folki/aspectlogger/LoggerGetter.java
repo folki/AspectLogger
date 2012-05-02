@@ -7,6 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 // TODO Extract interface
 class LoggerGetter {
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	public Logger getLoggerFor(ProceedingJoinPoint joinPoint) {
 		Class classOfReachedJoinPoint = getClassOfJoinPoint(joinPoint);
@@ -14,6 +15,20 @@ class LoggerGetter {
 		return log;
 	}		
 	
+	public Logger getLoggerFor(LoggableMethodDescription loggableMethod) {
+		String loggerName = getLoggerNameFor(loggableMethod);
+		Logger logger = getLogger(loggerName);
+		return logger;
+	}
+	
+	private Logger getLogger(String loggerName) {
+		return Logger.getLogger(loggerName);
+	}
+
+	private String getLoggerNameFor(LoggableMethodDescription loggableMethod) {
+		return loggableMethod.getParentClass().getName();
+	}
+
 	@SuppressWarnings("rawtypes")
 	private Class getClassOfJoinPoint(JoinPoint joinPoint) {
 		return joinPoint.getTarget().getClass();

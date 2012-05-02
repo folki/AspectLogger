@@ -8,8 +8,10 @@ import org.apache.log4j.Logger;
 
 //TODO Extract interface
 class AspectLogger {
+	private LoggerGetter loggerGetter = new LoggerGetter();
 
-	public void log(Logger logger, LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
+	public void log(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
+		Logger logger = loggerGetter.getLoggerFor(loggableMethod);
 		Level logLevel = logger.getLevel();
 		if (processingResult.isSuccessfull()) {
 			if (logLevel == INFO) {
