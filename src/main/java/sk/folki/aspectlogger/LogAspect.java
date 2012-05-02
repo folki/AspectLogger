@@ -9,8 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class LogAspect {
-	private LoggableProceedor loggableProceeder = new LoggableProceedor(); 
-	private AspectLogger aspectLogger = new AspectLogger();
+	private LoggableProceedor loggableProceeder; 
+	private AspectLogger aspectLogger;
+	
+	public LogAspect() {
+		loggableProceeder = new LoggableProceedor();
+		aspectLogger = new AspectLogger();
+	}
 	
 	@Around(value = "@annotation(loggableAnnotation)", argNames = "loggableMethod, loggableAnnotation")
 	public void invokedAndLogLoggableMethod(ProceedingJoinPoint loggableMethod, Loggable loggableAnnotation) throws Throwable {		
