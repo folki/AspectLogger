@@ -4,12 +4,12 @@ import org.aspectj.lang.ProceedingJoinPoint;
 
 import sk.folki.aspectlogger.core.LoggableMethodInvocation;
 
-//TODO Extract interface
-public class LoggableProceedor {
+class DefaultLoggableMethodProceeder implements LoggableMethodProceeder {
 
-	public LoggableMethodInvocation proceedToJoinPoint(ProceedingJoinPoint joinPoint) {
+	@Override
+	public LoggableMethodInvocation proceedToJoinPoint(ProceedingJoinPoint loggableMethod) {
 		try {
-			Object returnedObject = joinPoint.proceed();
+			Object returnedObject = loggableMethod.proceed();
 			return LoggableMethodInvocation.createOkResult(returnedObject);
 		} catch (Throwable error) {
 			return LoggableMethodInvocation.createErrorResult(error);

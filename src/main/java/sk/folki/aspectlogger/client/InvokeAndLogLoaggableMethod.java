@@ -7,11 +7,11 @@ import sk.folki.aspectlogger.core.LoggableMethodDescription;
 import sk.folki.aspectlogger.core.LoggableMethodInvocation;
 
 class InvokeAndLogLoaggableMethod implements LoggableMethodProcessor {
-	private LoggableProceedor loggableProceeder; 
+	private LoggableMethodProceeder loggableProceeder; 
 	private AspectLogger aspectLogger;
 	
 	public InvokeAndLogLoaggableMethod() {
-		loggableProceeder = new LoggableProceedor();
+		loggableProceeder = new DefaultLoggableMethodProceeder();
 		aspectLogger = new AspectLogger();
 	}
 	
