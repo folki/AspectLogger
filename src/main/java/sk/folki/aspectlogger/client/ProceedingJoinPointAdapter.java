@@ -28,27 +28,6 @@ class ProceedingJoinPointAdapter {
 		loggableMethod.setParentClass(parentClass);
 		return loggableMethod;
 	}
-
-	/*private Parameters getParameters(ProceedingJoinPoint joinPoint) {
-		Parameters parameters = new Parameters();
-		final Signature signature = joinPoint.getStaticPart().getSignature();
-	    if(signature instanceof MethodSignature){
-	        final MethodSignature ms = (MethodSignature) signature;
-	        final String[] parameterNames = ms.getParameterNames();
-	        final Object[] parameterValues = joinPoint.getArgs();
-	        for (int i = 0; i < parameterValues.length; i++) {
-	        	String name;
-	        	if (parameterNames == null || parameterNames[i] == null) {
-					name = String.valueOf(i);
-	        	} else {
-	        		name = parameterNames[i];
-	        	}
-	        	Object value = parameterValues[i];
-	        	parameters.addParameter(name, value);
-	        }
-	    }
-	    return parameters;
-	}*/
 	
 	private Class<?> getParentClass(ProceedingJoinPoint joinPoint) {
 		return joinPoint.getTarget().getClass();
@@ -68,5 +47,4 @@ class ProceedingJoinPointAdapter {
 	private String getLogMessage(Loggable loggable) {
 		return loggable.value();
 	}
-
 }

@@ -12,7 +12,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import sk.folki.aspectlogger.client.LogAspect;
 
-// TODO Move end to end tests to own package.
 abstract class AbstractEndToEndTest {
 	final static MavenDependency ASPECTJWEAVER = maven(groupId("org.aspectj"), artifactId("aspectjweaver"));
 	final static MavenDependency ASPECTJRT = maven(groupId("org.aspectj"), artifactId("aspectjrt"));
