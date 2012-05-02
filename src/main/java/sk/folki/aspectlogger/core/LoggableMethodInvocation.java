@@ -4,25 +4,7 @@ public class LoggableMethodInvocation {
 	private	boolean isOk;
 	private Throwable caughtException;
 	private Object returnedObject;
-	
-	public LoggableMethodInvocation(Object returnedObject) {
-		isOk = true;
-		this.returnedObject = returnedObject;
-	}
-	
-	public LoggableMethodInvocation(Throwable error) {
-		isOk = false;
-		caughtException = error;
-	}
-
-	public static LoggableMethodInvocation createOkResult(Object returnedObject) {
-		return new LoggableMethodInvocation(returnedObject);
-	}
-	
-	public static LoggableMethodInvocation createErrorResult(Throwable error) {
-		return new LoggableMethodInvocation(error);
-	}
-	
+		
 	public Throwable getOccuredError() {
 		return caughtException;
 	}		
@@ -37,5 +19,17 @@ public class LoggableMethodInvocation {
 	
 	public Object getReturnedObject() {
 		return returnedObject;
+	}
+
+	public void setSuccessfullyInvoked(boolean isSuccessfullyInvoked) {
+		this.isOk = isSuccessfullyInvoked;
+	}
+
+	public void setReturnedObject(Object returnedObject) {
+		this.returnedObject = returnedObject;
+	}
+
+	public void setOccuredError(Throwable occuredError) {
+		this.caughtException = occuredError;
 	}
 }
