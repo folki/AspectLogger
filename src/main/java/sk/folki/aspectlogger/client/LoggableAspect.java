@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Aspect
-public class LogAspect {
+public class LoggableAspect {
 	private LoggableMethodProcessor loggableMethodProcessor;
 	
-	public LogAspect() {
+	public LoggableAspect() {
 		loggableMethodProcessor = new InvokeAndLogLoaggableMethod();
 	}
 	

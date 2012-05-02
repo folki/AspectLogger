@@ -10,7 +10,7 @@ import org.apache.log4j.SimpleLayout;
 import org.apache.log4j.WriterAppender;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import sk.folki.aspectlogger.client.LogAspect;
+import sk.folki.aspectlogger.client.LoggableAspect;
 
 abstract class AbstractEndToEndTest {
 	final static MavenDependency ASPECTJWEAVER = maven(groupId("org.aspectj"), artifactId("aspectjweaver"));
@@ -31,7 +31,7 @@ abstract class AbstractEndToEndTest {
 	private void givenPrerequisitiesForUsageAspectLoggerLibraryAreFulfilled() {
 		givenLog4jIsConfigured();
 		givenSpringIsUsed();
-		givenLogAspectIsManagedBySpring();
+		givenLoggableAspectIsManagedBySpring();
 		givenSpringAspectJAutoProxyIsEnabled();
 		givenServiceBeanIsManagedBySpring();
 		givenDependencyIsOnTheApplicationClasspath(ASPECTJWEAVER);
@@ -105,9 +105,8 @@ abstract class AbstractEndToEndTest {
 		springContext = new AnnotationConfigApplicationContext();
 	}
 
-	// TODO Rename LogAspect so to be better understandable that it is part of AspectLogger library when user needs set up the aspect to be managed by Spring. 
-	private void givenLogAspectIsManagedBySpring() {
-		springContext.register(LogAspect.class);
+	private void givenLoggableAspectIsManagedBySpring() {
+		springContext.register(LoggableAspect.class);
 	}
 
 	private void givenSpringAspectJAutoProxyIsEnabled() {
