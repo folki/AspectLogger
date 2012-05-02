@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+// TODO Split sk.folki.aspectlogger package to subpackages
 @Component
 @Aspect
 public class LogAspect {
