@@ -1,6 +1,6 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.core;
 
-class LoggableMethodInvocation {
+public class LoggableMethodInvocation {
 	private	boolean isOk;
 	private Throwable caughtException;
 	private Object returnedObject;
@@ -23,7 +23,7 @@ class LoggableMethodInvocation {
 		return new LoggableMethodInvocation(error);
 	}
 	
-	Throwable getOccuredError() {
+	public Throwable getOccuredError() {
 		return caughtException;
 	}		
 

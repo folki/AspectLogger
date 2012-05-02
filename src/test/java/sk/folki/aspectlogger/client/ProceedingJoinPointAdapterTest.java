@@ -1,4 +1,4 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.client;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -9,6 +9,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.unitils.UnitilsJUnit4;
 import org.unitils.mock.Mock;
+
+import sk.folki.aspectlogger.client.Loggable;
+import sk.folki.aspectlogger.client.ProceedingJoinPointAdapter;
+import sk.folki.aspectlogger.core.LoggableMethodDescription;
 
 public class ProceedingJoinPointAdapterTest extends UnitilsJUnit4 {
 	private Mock<ProceedingJoinPoint> joinPoint;

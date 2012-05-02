@@ -1,7 +1,9 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.client;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 
+import sk.folki.aspectlogger.core.LoggableMethodDescription;
+import sk.folki.aspectlogger.core.Parameters;
 
 class ProceedingJoinPointAdapter {
 	private ProceedingJoinPoint joinPoint;

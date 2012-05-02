@@ -1,9 +1,11 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.e2e;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
+
+import sk.folki.aspectlogger.client.Loggable;
 
 public class PassParametersToLoggableMethodTest extends AbstractEndToEndTest {
 	private Service service;

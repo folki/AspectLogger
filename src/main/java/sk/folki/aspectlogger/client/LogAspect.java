@@ -1,11 +1,14 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.client;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-// TODO Split sk.folki.aspectlogger package to subpackages
+import sk.folki.aspectlogger.core.AspectLogger;
+import sk.folki.aspectlogger.core.LoggableMethodDescription;
+import sk.folki.aspectlogger.core.LoggableMethodInvocation;
+
 @Component
 @Aspect
 public class LogAspect {

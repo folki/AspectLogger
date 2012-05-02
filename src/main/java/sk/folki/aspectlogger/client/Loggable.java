@@ -1,4 +1,4 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.client;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

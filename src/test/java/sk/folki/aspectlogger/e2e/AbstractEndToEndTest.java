@@ -1,4 +1,4 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.e2e;
 
 import static org.junit.Assert.fail;
 
@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
 import org.apache.log4j.WriterAppender;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import sk.folki.aspectlogger.client.LogAspect;
 
 // TODO Move end to end tests to own package.
 abstract class AbstractEndToEndTest {

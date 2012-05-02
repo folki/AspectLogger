@@ -1,4 +1,4 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.core;
 
 import static org.apache.log4j.Level.DEBUG;
 import static org.apache.log4j.Level.INFO;
@@ -6,8 +6,9 @@ import static org.apache.log4j.Level.INFO;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+
 //TODO Extract interface
-class AspectLogger {
+public class AspectLogger {
 	private LoggerGetter loggerGetter = new LoggerGetter();
 
 	public void log(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {

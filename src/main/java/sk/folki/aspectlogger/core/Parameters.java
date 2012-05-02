@@ -1,9 +1,9 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.core;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-class Parameters {
+public class Parameters {
 	private Map<String, Object> parameters = new LinkedHashMap<String, Object>();
 
 	public void addParameter(String name, Object value) {

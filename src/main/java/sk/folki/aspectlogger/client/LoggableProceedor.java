@@ -1,9 +1,11 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.client;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 
+import sk.folki.aspectlogger.core.LoggableMethodInvocation;
+
 //TODO Extract interface
-class LoggableProceedor {
+public class LoggableProceedor {
 
 	public LoggableMethodInvocation proceedToJoinPoint(ProceedingJoinPoint joinPoint) {
 		try {

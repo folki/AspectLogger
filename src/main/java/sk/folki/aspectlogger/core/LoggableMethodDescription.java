@@ -1,8 +1,6 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.core;
 
-
-
-class LoggableMethodDescription {
+public class LoggableMethodDescription {
 	private Parameters parameters;
 	private String logMessage;
 	private Class<?> parentClass;

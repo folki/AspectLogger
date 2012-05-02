@@ -1,8 +1,9 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.core;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+
 
 // TODO Extract interface
 class LoggerGetter {

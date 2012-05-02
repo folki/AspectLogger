@@ -1,4 +1,4 @@
-package sk.folki.aspectlogger;
+package sk.folki.aspectlogger.e2e;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -7,6 +7,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+
+import sk.folki.aspectlogger.client.Loggable;
 
 public class LogDebugMessageOfLoggableMethodEndToEndTest extends AbstractEndToEndTest {
 	private final static String MESSAGE = "Service operation";
