@@ -14,7 +14,7 @@ public class LogAspect {
 	private LoggableProceedor loggableProceeder = new LoggableProceedor(); 
 	private AspectLogger aspectLogger = new AspectLogger();
 	
-	@Around(value = "@annotation(loggable)", argNames = "loggableMethodJoinPoint, loggableAnnotation")
+	@Around(value = "@annotation(loggableAnnotation)", argNames = "loggableMethod, loggableAnnotation")
 	public void invokedAndLogLoggableMethod(ProceedingJoinPoint loggableMethod, Loggable loggableAnnotation) throws Throwable {
 		Logger loggableMethodLogger = getLoggerFor(loggableMethod);		
 		LoggableMethodDescription loggableMethodDescription = createLoggableMethodDescription(loggableMethod, loggableAnnotation);
