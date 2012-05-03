@@ -1,7 +1,11 @@
 package sk.folki.aspectlogger.core;
 
+import static org.apache.log4j.Level.TRACE;
 import static org.apache.log4j.Level.DEBUG;
 import static org.apache.log4j.Level.INFO;
+import static org.apache.log4j.Level.WARN;
+import static org.apache.log4j.Level.ERROR;
+import static org.apache.log4j.Level.OFF;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -12,26 +16,67 @@ public class AspectLogger {
 	private LoggerGetter loggerGetter = new LoggerGetter();
 
 	public void log(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
+		// TODO Separate generating log message from writing log message
+		
 		Logger logger = loggerGetter.getLoggerFor(loggableMethod);
 		Level logLevel = logger.getLevel();
+		// Generate message
+		String logMessage = null;
 		if (processingResult.isSuccessfull()) {
 			if (logLevel == INFO) {
-				logOkInfoMessage(logger, loggableMethod);
+				logMessage = generateOkInfoMessage(loggableMethod);
 			} else if (logLevel == DEBUG) {
-				logOkDebugMessage(logger, loggableMethod, processingResult);
+				logMessage = generateOkDebugMessage(loggableMethod, processingResult);
 			} 			
 		} else {
 			if (logLevel == INFO) {
-				logErrorInfoMessage(logger, loggableMethod, processingResult);
+				logMessage = generateErrorInfoMessage(loggableMethod, processingResult);
 			} else if (logLevel == DEBUG) {
-				logErrorDebugMessage(logger, loggableMethod, processingResult);
+				logMessage = generateErrorDebugMessage(loggableMethod, processingResult);
 			}				
+		}
+		// Log generated message
+		if (processingResult.isSuccessfull()) {
+			if (logLevel == TRACE) {
+				logMessage(logger, TRACE, logMessage);
+			} else if (logLevel == DEBUG) {
+				logMessage(logger, DEBUG, logMessage);
+			} else if (logLevel == INFO) {
+				logMessage(logger, INFO, logMessage);
+			} else if (logLevel == WARN) {
+				doNothing();
+			} else if (logLevel == ERROR) {
+				doNothing();
+			} else if (logLevel == OFF) {
+				doNothing();
+			}
+		} else {
+			if (logLevel == TRACE) {
+				logMessage(logger, ERROR, logMessage);
+			} else if (logLevel == DEBUG) {
+				logMessage(logger, ERROR, logMessage);
+			} else if (logLevel == INFO) {
+				logMessage(logger, ERROR, logMessage);
+			} else if (logLevel == WARN) {
+				logMessage(logger, ERROR, logMessage);
+			} else if (logLevel == ERROR) {
+				logMessage(logger, ERROR, logMessage);
+			} else if (logLevel == OFF) {
+				doNothing();
+			}
 		}
 	}	
 	
-	private void logOkInfoMessage(Logger log, LoggableMethodDescription loggableMethod) {
+	private void logMessage(Logger logger, Level level, String messageToLog) {
+		logger.log(level, messageToLog);
+	}
+
+	private void doNothing() {	
+	}
+
+	private String generateOkInfoMessage(LoggableMethodDescription loggableMethod) {
 		String logMessage = assembleOkInfoLogMessage(loggableMethod);
-		log.info(logMessage);
+		return logMessage;
 	}
 	
 	private String assembleOkInfoLogMessage(LoggableMethodDescription loggableMethod) {
@@ -43,10 +88,10 @@ public class AspectLogger {
 		return loggableMethod.getLogMessage();
 	}
 	
-	private void logOkDebugMessage(Logger log, LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
+	private String generateOkDebugMessage(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
 		Parameters loggableOperationParameters = loggableMethod.getParameters();
 		String logMessage = assembleOkDebugLogMessage(loggableOperationParameters, loggableMethod, processingResult);
-		log.debug(logMessage);
+		return logMessage;
 	}
 
 	private String assembleOkDebugLogMessage(Parameters loggableOperationParameters, LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
@@ -73,9 +118,9 @@ public class AspectLogger {
 		return processingResult.getReturnedObject().toString();
 	}
 	
-	private void logErrorInfoMessage(Logger log, LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
+	private String generateErrorInfoMessage(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
 		String logMessage = assembleErrorInfoLogMessage(loggableMethod);
-		log.error(logMessage);
+		return logMessage;
 	}
 
 	private String assembleErrorInfoLogMessage(LoggableMethodDescription loggableMethod) {
@@ -84,10 +129,10 @@ public class AspectLogger {
 		return errorMessage;
 	}
 	
-	private void logErrorDebugMessage(Logger log, LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
+	private String generateErrorDebugMessage(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
 		Parameters loggableOperationParameters = loggableMethod.getParameters();
 		String logMessage = assembleErrorDebugLogMessage(loggableOperationParameters, loggableMethod, processingResult);
-		log.error(logMessage);
+		return logMessage;
 	}
 
 	private String assembleErrorDebugLogMessage(Parameters loggableOperationParameters, LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
