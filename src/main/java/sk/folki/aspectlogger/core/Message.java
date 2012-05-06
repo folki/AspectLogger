@@ -11,11 +11,15 @@ class Message {
 		this.logMessage = logMessage;
 	}
 
-	public boolean isInfoMessage() {
+	public boolean isSuccessMessage() {
 		return messageLevel.equals("info");
 	}	
 	
 	public String toString() {
 		return logMessage;
+	}
+
+	public boolean isFailureMessage() {
+		return !isSuccessMessage();
 	}
 }

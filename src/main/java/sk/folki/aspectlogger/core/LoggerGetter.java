@@ -20,7 +20,7 @@ class LoggerGetter {
 	public LoggableMethodLogger getLoggerFor(LoggableMethodDescription loggableMethod) {
 		String loggerName = getLoggerNameFor(loggableMethod);
 		Logger logger = getLogger(loggerName);
-		return new LoggableMethodLogger(logger);
+		return new Log4jLoggableMethodLogger(logger);
 	}
 	
 	private Logger getLogger(String loggerName) {
