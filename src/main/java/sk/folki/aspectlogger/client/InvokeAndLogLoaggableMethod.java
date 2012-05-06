@@ -3,6 +3,7 @@ package sk.folki.aspectlogger.client;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 import sk.folki.aspectlogger.core.AspectLogger;
+import sk.folki.aspectlogger.core.DefaultAspectLogger;
 import sk.folki.aspectlogger.core.LoggableMethodDescription;
 import sk.folki.aspectlogger.core.LoggableMethodInvocation;
 
@@ -12,7 +13,7 @@ class InvokeAndLogLoaggableMethod implements LoggableMethodProcessor {
 	
 	public InvokeAndLogLoaggableMethod() {
 		loggableProceeder = new DefaultLoggableMethodProceeder();
-		aspectLogger = new AspectLogger();
+		aspectLogger = new DefaultAspectLogger();
 	}
 	
 	@Override
