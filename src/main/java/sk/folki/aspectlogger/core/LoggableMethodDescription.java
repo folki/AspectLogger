@@ -2,7 +2,7 @@ package sk.folki.aspectlogger.core;
 
 public interface LoggableMethodDescription {
 
-	public String getLogMessage();
+	public String getInfoMessage();
 
 	public Parameters getParameters();
 

@@ -40,7 +40,7 @@ class MessageGenerator {
 	}
 	
 	private String getLoggableOperationMessage(LoggableMethodDescription loggableMethod) {
-		return loggableMethod.getLogMessage();
+		return loggableMethod.getInfoMessage();
 	}
 	
 	private String generateOkDebugMessage(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
@@ -79,7 +79,7 @@ class MessageGenerator {
 	}
 
 	private String assembleErrorInfoLogMessage(LoggableMethodDescription loggableMethod) {
-		String infoMessage = loggableMethod.getLogMessage();
+		String infoMessage = loggableMethod.getInfoMessage();
 		String errorMessage = "Error: " + infoMessage;
 		return errorMessage;
 	}

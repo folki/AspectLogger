@@ -64,7 +64,7 @@ public class ProceedingJoinPointAdapterTest extends UnitilsJUnit4 {
 	}
 
 	private void loggableMethodCreatedByAdapterHasLogMessage(String expectedLogMessage) {
-		assertThat(loggableMethod.getLogMessage(), equalTo(expectedLogMessage));
+		assertThat(loggableMethod.getInfoMessage(), equalTo(expectedLogMessage));
 	}
 
 	@Test

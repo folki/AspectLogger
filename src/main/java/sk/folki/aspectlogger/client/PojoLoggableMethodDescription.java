@@ -8,8 +8,8 @@ class PojoLoggableMethodDescription implements LoggableMethodDescription {
 	private String logMessage;
 	private Class<?> parentClass;
 
-	public void setLogMessage(String logMessage) {
-		this.logMessage = logMessage;
+	public void setInfoMessage(String infoMessage) {
+		this.logMessage = infoMessage;
 	}
 	
 	public void setParameters(Parameters parameters) {
@@ -21,7 +21,7 @@ class PojoLoggableMethodDescription implements LoggableMethodDescription {
 	}
 	
 	@Override
-	public String getLogMessage() {
+	public String getInfoMessage() {
 		return logMessage;
 	}
 	
