@@ -5,6 +5,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 
+
 // TODO Extract interface
 class LoggerGetter {
 
@@ -16,10 +17,10 @@ class LoggerGetter {
 		return log;
 	}		
 	
-	public Logger getLoggerFor(LoggableMethodDescription loggableMethod) {
+	public LoggableMethodLogger getLoggerFor(LoggableMethodDescription loggableMethod) {
 		String loggerName = getLoggerNameFor(loggableMethod);
 		Logger logger = getLogger(loggerName);
-		return logger;
+		return new LoggableMethodLogger(logger);
 	}
 	
 	private Logger getLogger(String loggerName) {

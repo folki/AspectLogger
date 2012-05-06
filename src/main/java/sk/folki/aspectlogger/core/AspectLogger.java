@@ -1,77 +1,41 @@
 package sk.folki.aspectlogger.core;
 
-import static org.apache.log4j.Level.TRACE;
 import static org.apache.log4j.Level.DEBUG;
 import static org.apache.log4j.Level.INFO;
-import static org.apache.log4j.Level.WARN;
-import static org.apache.log4j.Level.ERROR;
-import static org.apache.log4j.Level.OFF;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 
 //TODO Extract interface
 public class AspectLogger {
 	private LoggerGetter loggerGetter = new LoggerGetter();
 
 	public void log(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
-		// TODO Separate generating log message from writing log message
-		
-		Logger logger = loggerGetter.getLoggerFor(loggableMethod);
-		Level logLevel = logger.getLevel();
-		// Generate message
+		LoggableMethodLogger loggableMethodLogger = loggerGetter.getLoggerFor(loggableMethod);
+		LoggableMethodLoggerConfig loggableMethodLoggerConfig  = loggableMethodLogger.getConfig();
+		Message logMessage = generateLogMessage(loggableMethodLoggerConfig, loggableMethod, processingResult);		
+		loggableMethodLogger.write(logMessage);
+	}	
+	
+	private Message generateLogMessage(LoggableMethodLoggerConfig loggableMethodLoggerConfig, LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
 		String logMessage = null;
+		String messageLevel = null;
+		Level logLevel = loggableMethodLoggerConfig.getLevel();
 		if (processingResult.isSuccessfull()) {
+			messageLevel = "info";
 			if (logLevel == INFO) {
 				logMessage = generateOkInfoMessage(loggableMethod);
 			} else if (logLevel == DEBUG) {
 				logMessage = generateOkDebugMessage(loggableMethod, processingResult);
 			} 			
 		} else {
+			messageLevel = "error";
 			if (logLevel == INFO) {
 				logMessage = generateErrorInfoMessage(loggableMethod, processingResult);
 			} else if (logLevel == DEBUG) {
 				logMessage = generateErrorDebugMessage(loggableMethod, processingResult);
 			}				
 		}
-		// Log generated message
-		if (processingResult.isSuccessfull()) {
-			if (logLevel == TRACE) {
-				logMessage(logger, TRACE, logMessage);
-			} else if (logLevel == DEBUG) {
-				logMessage(logger, DEBUG, logMessage);
-			} else if (logLevel == INFO) {
-				logMessage(logger, INFO, logMessage);
-			} else if (logLevel == WARN) {
-				doNothing();
-			} else if (logLevel == ERROR) {
-				doNothing();
-			} else if (logLevel == OFF) {
-				doNothing();
-			}
-		} else {
-			if (logLevel == TRACE) {
-				logMessage(logger, ERROR, logMessage);
-			} else if (logLevel == DEBUG) {
-				logMessage(logger, ERROR, logMessage);
-			} else if (logLevel == INFO) {
-				logMessage(logger, ERROR, logMessage);
-			} else if (logLevel == WARN) {
-				logMessage(logger, ERROR, logMessage);
-			} else if (logLevel == ERROR) {
-				logMessage(logger, ERROR, logMessage);
-			} else if (logLevel == OFF) {
-				doNothing();
-			}
-		}
-	}	
-	
-	private void logMessage(Logger logger, Level level, String messageToLog) {
-		logger.log(level, messageToLog);
-	}
-
-	private void doNothing() {	
+		return new Message(messageLevel, logMessage);
 	}
 
 	private String generateOkInfoMessage(LoggableMethodDescription loggableMethod) {
