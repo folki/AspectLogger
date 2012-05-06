@@ -22,7 +22,7 @@ class ProceedingJoinPointAdapter {
 		Parameters parameters = getParameters(joinPoint);
 		String logMessage = getLogMessage(loggable);
 		Class<?> parentClass = getParentClass(joinPoint);
-		LoggableMethodDescription loggableMethod = new LoggableMethodDescription();
+		PojoLoggableMethodDescription loggableMethod = new PojoLoggableMethodDescription();
 		loggableMethod.setParameters(parameters);
 		loggableMethod.setLogMessage(logMessage);
 		loggableMethod.setParentClass(parentClass);
