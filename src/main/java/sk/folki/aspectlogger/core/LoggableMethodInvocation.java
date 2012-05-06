@@ -1,35 +1,13 @@
 package sk.folki.aspectlogger.core;
 
-public class LoggableMethodInvocation {
-	private	boolean isOk;
-	private Throwable caughtException;
-	private Object returnedObject;
-		
-	public Throwable getOccuredError() {
-		return caughtException;
-	}		
+public interface LoggableMethodInvocation {
 
-	public boolean isSuccessfull() {
-		return isOk;
-	}
-	
-	public boolean isErrorOccured() {
-		return !isSuccessfull();
-	}
-	
-	public Object getReturnedObject() {
-		return returnedObject;
-	}
+	public Throwable getOccuredError();
 
-	public void setSuccessfullyInvoked(boolean isSuccessfullyInvoked) {
-		this.isOk = isSuccessfullyInvoked;
-	}
+	public boolean isSuccessfull();
 
-	public void setReturnedObject(Object returnedObject) {
-		this.returnedObject = returnedObject;
-	}
+	public boolean isErrorOccured();
 
-	public void setOccuredError(Throwable occuredError) {
-		this.caughtException = occuredError;
-	}
+	public Object getReturnedObject();
+
 }
