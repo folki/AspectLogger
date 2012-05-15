@@ -65,12 +65,19 @@ class MessageGenerator {
 			Object parameterValue = loggableOperationParameters.getValue(parameterName);
 			parametersStringChain += parameterName + "=" + parameterValue + ", ";
 		}
-		parametersStringChain = parametersStringChain.substring(0, parametersStringChain.length() - 2);
+		if (!parametersStringChain.isEmpty()) {
+			parametersStringChain = parametersStringChain.substring(0, parametersStringChain.length() - 2);
+		}
 		return parametersStringChain;
 	}
 	
 	private String getValueReturnedFromProcessedLoggableMethod(LoggableMethodInvocation processingResult) {
-		return processingResult.getReturnedObject().toString();
+		Object returnedObject = processingResult.getReturnedObject();
+		if (returnedObject == null) {
+			return "null";
+		} else {
+			return returnedObject.toString();
+		}
 	}
 	
 	private String generateErrorInfoMessage(LoggableMethodDescription loggableMethod, LoggableMethodInvocation processingResult) {
